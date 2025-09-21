@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Tween
 {
-    public Transform Target { get; private set; }
-    public Vector2 StartPos { get; private set; }
-    public Vector2 EndPos { get; private set; }
-    public float StartTime { get; private set; }
-    public float Duration { get; private set; }
+    public Transform Target;
+    public Vector2 StartPos;
+    public Vector2 EndPos;
+    public float StartTime;
+    public float Duration;
+    public float Elapsed;
 
     public Tween(Transform target, Vector2 startPos, Vector2 endPos, float startTime, float duration)
     {
@@ -17,6 +18,7 @@ public class Tween
         EndPos = endPos;
         StartTime = startTime;
         Duration = duration;
+        Elapsed = 0.0f;
     }
 
 }

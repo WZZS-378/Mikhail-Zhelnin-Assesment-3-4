@@ -25,17 +25,22 @@ public class Tweener : MonoBehaviour
     {
         if (activeTween == null) return;
 
-        float elapsedTime = Time.time - activeTween.StartTime;
-        float t = elapsedTime / activeTween.Duration;
+        activeTween.Elapsed += Time.deltaTime;
+        float t = activeTween.Elapsed / activeTween.Duration;
 
-        float dist = Vector2.Distance(activeTween.Target.position, activeTween.EndPos);
-        if (dist > 0.1f)
+        if (t < 1f)
         {
-            activeTween.Target.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, t);
-        } else if (dist <= 0.1f)
+            activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, t);
+        }
+        else
         {
             activeTween.Target.position = activeTween.EndPos;
             activeTween = null;
         }
+    }
+
+    public bool isTweening()
+    {
+        return activeTween != null;
     }
 }
