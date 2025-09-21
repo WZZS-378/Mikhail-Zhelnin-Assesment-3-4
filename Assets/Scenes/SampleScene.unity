@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a95359c16cb4ff429f8cfb39f0f67fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 275037007}
+  player: {fileID: 275037007}
   walkAudio: {fileID: 0}
 --- !u!114 &153936907
 MonoBehaviour:
@@ -489,7 +489,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -912,7 +912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &962232361
 Transform:
   m_ObjectHideFlags: 0
@@ -1093,7 +1093,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 7dec34a116d36a04d89499ad183ea154, type: 3}
   m_Resource: {fileID: 8300000, guid: 7dec34a116d36a04d89499ad183ea154, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    [SerializeField] private GameObject item;
+    [SerializeField] private GameObject player;
     [SerializeField] private AudioSource walkAudio;
     private Animator playerAnimator;
 
@@ -22,10 +22,10 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         tweener = GetComponent<Tweener>();
-        walkAudio = GetComponent<AudioSource>();
-        playerAnimator = item.GetComponent<Animator>();
+        walkAudio = player.GetComponent<AudioSource>();
+        playerAnimator = player.GetComponent<Animator>();
 
-        StartNextTween();
+     
     }
 
     // Update is called once per frame
@@ -40,14 +40,28 @@ public class InputManager : MonoBehaviour
 
     void StartNextTween()
     {
-        Debug.Log(i);
         if (i == 1) { playerAnimator.SetTrigger("TrRight"); }
         else if (i == 2) { playerAnimator.SetTrigger("TrDown"); }
         else if (i == 3) { playerAnimator.SetTrigger("TrLeft"); }
         else if (i > 3) { playerAnimator.SetTrigger("TrUp"); i = 0; }
 
         Vector2 nextPos = lst[i];
-        tweener.AddTween(item.transform, item.transform.position, nextPos, 1.2f);
+        tweener.AddTween(player.transform, player.transform.position, nextPos, 1.2f);
+
+        StartCoroutine(PlayFootsteps(2.3f));
+
         i++;
+    }
+
+    private IEnumerator PlayFootsteps(float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            walkAudio.Play();
+            yield return new WaitForSeconds(0.47f);
+            elapsed += 0.47f;
+        }
     }
 }
