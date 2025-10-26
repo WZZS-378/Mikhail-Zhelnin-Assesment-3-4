@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Level1Button
   - Level2Button
+  - QuitButton
   layers:
   - Default
   - TransparentFX

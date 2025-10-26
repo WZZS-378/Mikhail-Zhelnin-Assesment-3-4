@@ -7,8 +7,31 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 1)
+        {
+            GameObject quitBttn = GameObject.FindWithTag("QuitButton");
+            Button quitButton = quitBttn.GetComponent<Button>();
+
+            quitButton.onClick.AddListener(LoadMainMenu);
+        }
+    }
+
+    public void LoadMainMenu()
+    {
+        Destroy(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene(0);
+    }
+
     public void LoadFirstLevel()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        DontDestroyOnLoad(gameObject);
         SceneManager.LoadScene(1);
     }
 
