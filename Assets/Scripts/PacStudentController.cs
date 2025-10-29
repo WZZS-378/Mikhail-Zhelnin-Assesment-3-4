@@ -4,7 +4,14 @@ using UnityEngine.Tilemaps;
 
 public class PacStudentController : MonoBehaviour
 {
-    public enum Direction { None, Up, Down, Left, Right }
+    public enum Direction
+    {
+        None,
+        Up,
+        Down,
+        Left,
+        Right
+    }
 
     [SerializeField] private GameObject player;
     [SerializeField] private AudioSource walkAudio;
@@ -22,8 +29,8 @@ public class PacStudentController : MonoBehaviour
     private Vector3Int pendingCell;
     private bool wasTweeningLastFrame = false;
     private Coroutine footstepCoroutine = null;
-
-    [SerializeField] private float moveSpeed = 3f; // units/sec
+    
+    private float moveSpeed = 3f;
 
     void Start()
     {
@@ -33,7 +40,6 @@ public class PacStudentController : MonoBehaviour
         if (walkAudio == null) walkAudio = player.GetComponent<AudioSource>();
         if (palletEatAudio == null) palletEatAudio = player.GetComponent<AudioSource>();
 
-        // start cell based on player's world position (tilemap cell coords)
         currentCell = wallTilemap.WorldToCell(player.transform.position);
         pendingCell = currentCell;
         player.transform.position = wallTilemap.GetCellCenterWorld(currentCell);
@@ -43,31 +49,28 @@ public class PacStudentController : MonoBehaviour
 
     void Update()
     {
-        // lastInput only on KeyDown (remember until changed)
-        if (Input.GetKeyDown(KeyCode.W)) lastInput = Direction.Up;
-        if (Input.GetKeyDown(KeyCode.S)) lastInput = Direction.Down;
-        if (Input.GetKeyDown(KeyCode.A)) lastInput = Direction.Left;
-        if (Input.GetKeyDown(KeyCode.D)) lastInput = Direction.Right;
 
-        // currentInput is held key
-        if (Input.GetKey(KeyCode.W)) currentInput = Direction.Up;
-        else if (Input.GetKey(KeyCode.S)) currentInput = Direction.Down;
-        else if (Input.GetKey(KeyCode.A)) currentInput = Direction.Left;
-        else if (Input.GetKey(KeyCode.D)) currentInput = Direction.Right;
+        if (Input.GetKeyDown(KeyCode.W)) { lastInput = Direction.Up; }
+        if (Input.GetKeyDown(KeyCode.S)) { lastInput = Direction.Down; }
+        if (Input.GetKeyDown(KeyCode.A)) { lastInput = Direction.Left; }
+        if (Input.GetKeyDown(KeyCode.D)) { lastInput = Direction.Right; }
+
+        if (Input.GetKey(KeyCode.W)) { currentInput = Direction.Up; }
+        else if (Input.GetKey(KeyCode.S)) { currentInput = Direction.Down; }
+        else if (Input.GetKey(KeyCode.A)) { currentInput = Direction.Left; }
+        else if (Input.GetKey(KeyCode.D)) { currentInput = Direction.Right; }
         else currentInput = Direction.None;
 
         bool isTweeningNow = (tweener != null) && tweener.isTweening();
 
-        if (wasTweeningLastFrame && !isTweeningNow) FinishedMove();
+        if (wasTweeningLastFrame && !isTweeningNow) { FinishedMove(); }
 
-        if (!isTweeningNow) TryStartMoveFromInputs();
-
+        if (!isTweeningNow) { TryStartMoveFromInputs(); }
         wasTweeningLastFrame = isTweeningNow;
     }
 
     private void TryStartMoveFromInputs()
     {
-        // try lastInput first (remembered), if blocked try currentInput
         if (lastInput != Direction.None)
         {
             Vector3Int cand = currentCell + DirToCell(lastInput);
@@ -97,19 +100,16 @@ public class PacStudentController : MonoBehaviour
         float distance = Vector3.Distance(startWorld, endWorld);
         float duration = Mathf.Max(0.0001f, distance / Mathf.Max(0.0001f, moveSpeed));
 
-        if (tweener != null)
-            tweener.AddTween(player.transform, startWorld, endWorld, duration);
-        else
-            player.transform.position = endWorld;
+        if (tweener != null) { tweener.AddTween(player.transform, startWorld, endWorld, duration); }
+        else { player.transform.position = endWorld; }
 
         pendingCell = targetCell;
 
-        // animation / dust / footsteps
-        if (playerAnimator != null) PlayDirectionAnimation(dir);
-        if (dustParticles != null && !dustParticles.isPlaying) dustParticles.Play();
+        if (playerAnimator != null) { PlayDirectionAnimation(dir); }
+        if (dustParticles != null && !dustParticles.isPlaying) { dustParticles.Play(); }
         if (walkAudio != null)
         {
-            if (footstepCoroutine != null) StopCoroutine(footstepCoroutine);
+            if (footstepCoroutine != null) { StopCoroutine(footstepCoroutine); }
             footstepCoroutine = StartCoroutine(PlayFootsteps(duration));
         }
 
@@ -120,7 +120,7 @@ public class PacStudentController : MonoBehaviour
             if (pellet != null)
             {
                 pelletTilemap.SetTile(targetCell, null);
-                if (palletEatAudio != null) palletEatAudio.Play();
+                if (palletEatAudio != null) { palletEatAudio.Play(); }
                 // optional: instantiate particle at endWorld if you want visual pop
             }
         }
@@ -130,9 +130,9 @@ public class PacStudentController : MonoBehaviour
     {
         currentCell = pendingCell;
 
-        if (dustParticles != null && dustParticles.isPlaying) dustParticles.Stop();
+        if (dustParticles != null && dustParticles.isPlaying) { dustParticles.Stop(); }
         if (footstepCoroutine != null) { StopCoroutine(footstepCoroutine); footstepCoroutine = null; }
-        if (walkAudio != null && walkAudio.isPlaying) walkAudio.Stop();
+        if (walkAudio != null && walkAudio.isPlaying) { walkAudio.Stop(); }
     }
 
     private IEnumerator PlayFootsteps(float duration)
@@ -141,7 +141,7 @@ public class PacStudentController : MonoBehaviour
         float interval = 0.47f;
         while (elapsed < duration)
         {
-            if (walkAudio != null) walkAudio.Play();
+            if (walkAudio != null) { walkAudio.Play(); }
             yield return new WaitForSeconds(interval);
             elapsed += interval;
         }
@@ -161,7 +161,7 @@ public class PacStudentController : MonoBehaviour
 
     private bool IsBlocked(Vector3Int cell)
     {
-        if (wallTilemap == null) return false;
+        if (wallTilemap == null) { return false; }
         return wallTilemap.GetTile(cell) != null;
     }
 
